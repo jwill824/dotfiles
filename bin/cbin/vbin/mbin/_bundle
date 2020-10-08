@@ -1,0 +1,34 @@
+#!/bin/sh
+brewp="all_proxy=http://$USER:@proxy.spectrum-health.org:9090 brew"
+
+function install_step1_install_homebrew {
+  if [[ ! -f $(which brew) ]]; then
+    ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+  fi
+}
+
+function install_step2_tap_bundle_keg {
+  eval "$brewp tap homebrew/bundle"
+}
+
+function install_step3_brew_bundle {
+  if [[ -f $2 ]]; then
+    eval "$brewp bundle --file=$2"
+  else
+    eval "$brewp bundle --file=$DOTFILES_HOME/Brewfile"
+  fi
+
+  if [[ -f $PERSONAL_DOTFILES_HOME/Brewfile ]]; then
+    eval "$brewp bundle --file=$PERSONAL_DOTFILES_HOME/Brewfile"
+  fi
+}
+
+case $1 in
+
+install)
+  install_step1_install_homebrew
+  install_step2_tap_bundle_keg
+  install_step3_brew_bundle
+;;
+
+esac

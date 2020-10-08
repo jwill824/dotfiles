@@ -1,0 +1,45 @@
+#!/bin/sh
+
+export PATH=$DOTFILES_HOME/bin/cbin/vbin/mbin:$PATH
+
+help_prompt="
+Usage: dotbot -d|doctor 
+
+Example:
+"
+
+case $1 in
+
+git)
+    
+;;
+
+dotfiles)
+
+;;
+
+java)
+
+;;
+
+bundle)
+
+;;
+
+shell)
+
+;;
+
+workspace)
+
+;;
+
+help)
+	printf "$help_prompt\n"
+;;
+
+*)
+    printf "$help_prompt\n"
+;;
+
+esac

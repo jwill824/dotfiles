@@ -1,0 +1,43 @@
+#!/bin/sh
+export PATH=$DOTFILES_HOME/bin/cbin/vbin/mbin:$PATH
+
+help_prompt="
+Usage: dotbot [-S|set] [java [<version>] [--apply-artifactory-cert] | maven | shell <type> | git <email> | help]
+"
+
+case $1 in
+
+# git,svn,mercurial
+vcs)
+  _vcs set
+;;
+
+# java,js,ruby,python,dotnet
+lang)
+  _lang set $2 $3 # java version
+;;
+
+# homebrew,maven,npm,rubygems,pip,nuget
+package)
+  _package set $2
+;;
+
+# bash,sh,zsh
+shell)
+  _shell set $2 # shell type e.g. bash,sh,zsh,etc
+;;
+
+# macos defaults
+defaults)
+  _defaults set
+;;
+
+help)
+  printf "$help_prompt\n"
+;;
+
+*)
+  printf "$help_prompt\n"
+;;
+
+esac

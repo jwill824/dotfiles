@@ -1,0 +1,77 @@
+#!/bin/sh
+
+export DOTFILES_HOME=~/.dotfiles
+export PATH=$DOTFILES_HOME/bin/cbin:$PATH
+
+function base_installation_sequence {
+  dotbot -I bundle
+  dotbot -S maven
+  dotbot -S java 1.8 --apply-artifactory-cert
+}
+
+help_prompt="
+     __ _ _
+    / _(_) | ___  ___
+   | |_| | |/ _ \/ __|
+  _|  _| | |  __/\__ \\
+ (_)_| |_|_|\___||___/
+
+Usage: dotfiles [options] [install_level] [args...]
+
+   Interfaces the dotbot script.
+
+Example:
+dotfiles -R|run --full
+dotfiles -R|run --express
+
+Options:
+   -R run [install_level]
+                  Executes several sub commands that configure your
+                  developer environment from scratch
+   -h --help      Lists all the dotfiles commands
+
+Install Levels:
+   -f --full      Creates your workspace in /opt named 'spectrum_health',
+                  chooses bash set-up, pulls git versioned directories
+                  to inflate your workspace and then does a base installation
+                  of the main components necessary to do java development
+   -e --express   Forgoes 'full' installation, and just does base installation
+                  of the java development components
+"
+
+case $1 in
+
+-R|run)
+
+  case $2 in
+  
+    -f|--full)
+      dotbot -C workspace
+      dotbot -a projects
+      base_installation_sequence
+      dotbot -S shell bash
+      . $HOME/.bash_profile
+    ;;
+
+    -e|--express)
+      base_installation_sequence
+      . $HOME/.bash_profile
+    ;;
+
+    *)
+      printf "$help_prompt\n"
+    ;;
+
+  esac
+
+;;
+
+-h|--help)
+  printf "$help_prompt\n"
+;;
+
+*)
+  printf "$help_prompt\n"
+;;
+
+esac

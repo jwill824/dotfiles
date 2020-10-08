@@ -1,0 +1,71 @@
+#!/bin/sh
+
+export WORK="/opt/spectrum_health"
+
+function create_step1_create_work_dir {
+  sudo mkdir -p $WORK
+  sudo chown $USER:staff $WORK
+}
+
+function create_step2_create_work_subdirs {
+  ews_dirs_map="bin,lib,configs,projects,resources,settings"
+  IFS=","
+  for i in $ews_dirs_map; do
+    if [[ ! -d $i ]]; then
+      sudo mkdir -p $i $WORK
+    fi
+  done
+}
+
+function add_step1_check_work_dir {
+  if [[ -z $WORK ]]; then
+    printf "$WORK doesn't exist!\n"
+    exit
+  fi
+}
+
+function add_step2_clone_projects {
+  # NOTE: these names need to be exactly the same as they are in BitBucket
+  # Formatted as: "repository":"destination"
+  # Delimited by: ","
+  ews_repos_map="oracletns:$WORK/oracletns,homeBin:$WORK/bin,soa-archetypes:$WORK/lib/archetype,soa-common:$WORK/lib/soa-common,helm:$WORK/resources/helm,ews-standards:$WORK/resources/ews-standards,readme_template:$WORK/resources/readme_template"
+
+  pushd $WORK > /dev/null 2>&1
+  IFS=','
+  for i in $ews_repos_map; do
+    IFS=':' read -r -a map_array <<< "$i"
+    repo=${map_array[0]}
+    dest=${map_array[1]}
+    if [[ ! -d ./$dest ]]; then
+      git clone ssh://git@bitbucket.spectrum-health.org:7999/ews/$repo.git $dest
+    fi
+  done
+  popd > /dev/null 2>&1
+}
+
+function add_step3_symlink_dotfiles_dir {
+  # if [[ ! -d $WORK/usrlocaletc ]]; then
+  #   ln -s $WORK/usrlocaletc/* /usr/local/etc
+  # fi
+
+  if [[ ! -d $WORK/dotfiles ]]; then
+    ln -sv $DOTFILES_HOME $WORK/dotfiles
+  else
+    printf "$DOTFILES_HOME has already been symlinked to $WORK/dotfiles. Skipping...\n"
+  fi
+}
+
+case $1 in
+
+create)
+  create_step1_create_work_dir
+  create_step2_create_work_subdirs
+;;
+
+add)
+  add_step1_check_work_dir
+  add_step2_clone_projects
+  add_step3_symlink_dotfiles_dir
+;;
+
+esac

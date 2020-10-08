@@ -1,0 +1,83 @@
+#!/bin/sh
+
+# used for this context
+export PATH=$DOTFILES_HOME/bin/cbin/vbin:$DOTFILES_HOME/bin/cbin/vbin/mbin:$PATH
+export WORK=/opt/spectrum_health
+
+help_prompt="
+            _              _         _
+           / /\           /\ \      /\ \\
+          / /  \         /  \ \     \_\ \\
+         / / /\ \       / /\ \ \    /\__ \\
+        / / /\ \ \     / / /\ \ \  / /_ \ \\
+       / / /\ \_\ \   / / /  \ \_\/ / /\ \ \\
+      / / /\ \ \___\ / / /   / / / / /  \/_/
+     / / /  \ \ \__// / /   / / / / /
+ _  / / /____\_\ \ / / /___/ / / / /
+/\_/ / /__________/ / /____\/ /_/ /
+\/_\/_____________\/_________/\_\/
+
+
+Usage: dotbot -aCdhIS [module] [operands...] [args...]
+
+   Helps configure your macOS development environment.
+
+Examples:
+dotbot -I bundle
+dotbot -S java 1.8
+
+Options:
+  -a add [module]
+         projects         Adds base git projects to inflate your workspace
+                          with homeBin, oratnsnames, lib-related projects,
+                          and resource-related projects
+  -S set [module]
+         java <version>   Sets version of java you specify
+         maven            Sets maven $M2_HOME/settings.xml and java cert for you
+         shell <type>     Sets shell with the customized configurations you've provided
+         git <email>      Sets git config values
+  -I install [module]
+             bundle       Installs brews and brew casks
+  -C create [module]
+            workspace     Creates $WORK directory
+  -d doctor [module]      Runs the doctor command which does a status report on
+                          everything that should be installed and things that
+                          might be out of place
+  -s status [module]      Checks the status of a certain module or default is all modules
+  -h help                 Output commands"
+
+case $1 in
+
+-a|add)
+  _add $2 $3 $4
+;;
+
+-S|set)
+  _set $2 $3 $4
+;;
+
+-I|install)
+  _install $2 $3
+;;
+
+-C|create)
+  _create $2
+;;
+
+-d|doctor)
+  _doctor $2
+;;
+
+-s|status)
+  _status $2
+;;
+
+help)
+  printf "$help_prompt\n"
+;;
+
+*)
+  printf "$help_prompt\n"
+;;
+
+esac

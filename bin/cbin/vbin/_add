@@ -1,0 +1,25 @@
+#!/bin/sh
+export PATH=$DOTFILES_HOME/bin/cbin/vbin/mbin:$PATH
+
+help_prompt="
+Usage: dotbot -a|add [projects | help]
+
+Example:
+dotbot add projects
+"
+
+case $1 in
+
+projects)
+	_workspace add
+;;
+
+help)
+	printf "$help_prompt\n"
+;;
+
+*)
+	printf "$help_prompt\n"
+;;
+
+esac

@@ -1,0 +1,88 @@
+#!/bin/sh
+
+export PATH=$HOME/.jenv/shims:$PATH
+
+function java_version_parser {
+	echo $1 | sed -e 's/\([a-z-]\)//g' -e 's/\([0-9]\{1,\}.[0-9]\{1,\}\).*/\1/'
+}
+
+function java_version_exists {
+	local version_exists=0
+
+    IFS=$'\n'
+	for i in $(jenv whence java)
+	do
+		# e.g. jdk-10.0.2.jdk
+		#      jdk1.8.0_181.jdk
+		#      openjdk-11.0.1.jdk
+		if [[ $(java_version_parser $1) = $i  ]]
+		then
+			version_exists=1
+		fi
+	done
+
+	echo $version_exists
+}
+
+function set_step1_init_jenv {
+	if [[ -z $JAVA_HOME ]]; then
+		eval "$(jenv init -)"
+	fi
+}
+
+function set_step2_add_jenv_jvm {
+	IFS=$'\n'
+	for i in $(ls -1 /Library/Java/JavaVirtualMachines)
+	do
+		if [[ $(java_version_exists $i) -eq 0 ]]; then
+			jenv add /Library/Java/JavaVirtualMachines/$i/Contents/Home
+		else
+			printf "$(java_version_parser $i) already exists. Skipping...\n"
+		fi
+	done
+}
+
+function set_step3_set_jenv_jvm {
+	if [[ ! -z $2 ]]; then 
+		printf "Setting your global java version to $2" && jenv global $2
+	else
+		printf "Setting your global java version to 1.8" && jenv global 1.8
+	fi
+}
+
+function set_step4_apply_artifactory_cert {
+	if [[ -f $DOTFILES_HOME/resources/artifactory.cert ]]; then
+		sudo keytool -keystore $JAVA_HOME/jre/lib/security/cacerts -storepass "changeit" -importcert -alias artifactory -file $DOTFILES_HOME/resources/artifactory.cert
+	else
+		printf "$DOTFILES_HOME/resources/artifactory.cert has not been downloaded..."
+		printf "Run `dotbot set maven` to download the cert"
+	fi
+}
+
+function set_step5_apply_external_schema_fix {
+	if [[ ! -f $JAVA_HOME/jre/lib/jaxp.properties ]]; then
+		sudo touch $JAVA_HOME/jre/lib/jaxp.properties
+		sudo chown $USER $JAVA_HOME/jre/lib/jaxp.properties
+		echo "javax.xml.accessExternalSchema = all" >> $JAVA_HOME/jre/lib/jaxp.properties
+	fi
+}
+
+function set_step6_copy_command_to_clipboard {
+	printf "\nRestart bash session for JAVA_HOME to be set\n"
+	printf "The following has been copied to your clipboard:\n"
+	printf "> source $HOME/.bash_profile\n"
+	echo "source $HOME/.bash_profile" | pbcopy
+}
+
+case $1 in
+
+set)
+	set_step1_init_jenv
+	set_step2_add_jenv_jvm
+	set_step3_set_jenv_jvm
+	set_step4_apply_artifactory_cert
+	set_step5_apply_external_schema_fix
+	set_step6_copy_command_to_clipboard
+;;
+
+esac

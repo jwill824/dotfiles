@@ -1,0 +1,56 @@
+#!/bin/sh
+
+export PATH=$DOTFILES_HOME/bin/cbin/vbin/mbin:$PATH
+
+help_prompt="
+Usage: dotbot -s|status 
+
+Example:
+"
+
+case $1 in
+
+vcs)
+    _vcs status $2
+;;
+
+dotfiles)
+
+;;
+
+java)
+
+;;
+
+bundle)
+
+;;
+
+shell)
+
+;;
+
+workspace)
+
+;;
+
+help)
+	printf "$help_prompt\n"
+;;
+
+*)
+	IFS=$'\n'
+	for i in $(printenv | grep LOADED)
+	do
+        arg=$i
+        module="${arg%_LOADED=*}"
+        status="${arg#*=}"
+		if [[ $status -eq 1 ]]; then
+            echo "> \033[0;32m✓\033[0m $module"
+        else
+            echo "> \033[0;31mx\033[0m $module"
+		fi
+	done
+;;
+
+esac

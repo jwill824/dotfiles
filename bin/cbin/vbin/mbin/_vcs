@@ -1,0 +1,63 @@
+#!/bin/sh
+
+function check_git_status {
+  git_dir_search=$(find $1 -name ".git" -user $USER -type d 2>/dev/null)
+  IFS=$'\n '; read -r -a git_dirs <<< $git_dir_search
+
+  pushd $1 > /dev/null 2>&1
+  for i in "${git_dirs[@]}"; do
+    mod=0
+    cd ${i%/.git}
+
+    git_branch=$(git rev-parse --symbolic-full-name --abbrev-ref HEAD)
+
+    # Check for modified files
+    if [ $(git status | grep 'modified' -c) -ne 0 ]
+    then
+      mod=1
+      if [ $(git status | grep 'not staged for commit' -c) -ne 0 ]
+      then
+        mod=1
+        echo "${i%/.git}\033[0;31m [$git_branch][modified files][unstaged files] \033[0m"
+        continue
+      else
+        echo "${i%/.git}\033[0;31m [$git_branch][modified files] \033[0m"
+      fi
+    fi
+
+    # Check for untracked files
+    if [ $(git status | grep 'untracked' -c) -ne 0 ]
+    then
+      mod=1
+      echo "${i%/.git}\033[0;31m [$git_branch][untracked files] \033[0m"
+    fi
+
+    if [ $(git status | grep 'not staged for commit' -c) -ne 0 ]
+    then
+      mod=1
+      echo "${i%/.git}\033[0;31m [$git_branch][unstaged files] \033[0m"
+    fi
+
+    # Check if everything is peachy keen
+    if [ $mod -eq 0 ]
+    then
+      echo "${i%/.git}\033[0;32m [$git_branch][clean] \033[0m"
+    fi
+  done
+  popd > /dev/null 2>&1
+}
+
+case $1 in
+
+status)
+  check_git_status $HOME
+  check_git_status $WORK
+;;
+
+set)
+  if [[ -f $PERSONAL_DOTFILES_HOME/.gitconfig ]]; then
+    ln -sv $PERSONAL_DOTFILES_HOME/.gitconfig $HOME
+  fi
+;;
+
+esac

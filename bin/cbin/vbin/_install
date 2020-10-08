@@ -1,0 +1,31 @@
+#!/bin/sh
+export PATH=$DOTFILES_HOME/bin/cbin/vbin/mbin:$PATH
+
+help_prompt="
+Usage: dotbot -I|install [bundle [--file=<target>] | virtualbox | sqldeveloper | help]
+
+Example:
+dotbot install bundle --file=$DOTFILES_HOME/personal/Brewfile
+dotbot install sqldeveloper
+dotbot install virtualbox
+"
+
+case $1 in
+
+bundle)
+	_bundle install $2 $3
+;;
+
+virtualbox)
+	# download_team_drive_file VirtualBox-6.0.0-127566-OSX.dmg
+;;
+
+help)
+	printf "$help_prompt\n"
+;;
+
+*)
+	printf "$help_prompt\n"
+;;
+
+esac

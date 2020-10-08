@@ -1,0 +1,13 @@
+#!/bin/sh
+
+case $1 in
+
+set)
+  if [[ ! -f $HOME/.bash_profile ]]; then
+    ln -sv $DOTFILES_HOME/.bash_profile $HOME
+  else
+    printf "$DOTFILES_HOME/.bash_profile has already been symlinked to $HOME/.bash_profile . Skipping...\n"
+  fi
+;;
+
+esac
