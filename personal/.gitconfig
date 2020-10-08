@@ -1,0 +1,25 @@
+
+[alias]
+	co = checkout
+	st = status
+	br = branch -v
+	lg = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(red)<%an>%Creset' --abbrev-commit --date=local
+[hub]
+	protocol = https
+[color]
+	branch = auto
+	diff = auto
+	interactive = auto
+	status = auto
+	ui = true
+[core]
+	editor = vi
+[push]
+	default = simple
+[user]
+	name = Jeff Williams
+	email = jeffrey.williams2@spectrumhealth.org
+[credential]
+	helper = osxkeychain
+[init]
+	templatedir = ~/.git-templates
