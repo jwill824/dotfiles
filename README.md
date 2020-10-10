@@ -2,12 +2,13 @@
 
 ## Pre-requisites
 
-1. Download Xcode
+1. Download Xcode using personal Apple ID/Password:
+   > https://developer.apple.com/
 1. Install Xcode Command Line Tools -> Git
    1. `xcode-select --install`
 1. Add SSH RSA key to BitBucket or Github
    1. `ssh-keygen` (just fast click thru steps)
-   2. `open https://jira.internal.priority-health.com/stash/plugins/servlet/ssh/account/keys/add`
+   2. `open {ssh_key_add_url}`
    3. `pbcopy < ~/.ssh/id_rsa.pub`
 1. Install dotfiles
    1. `git clone {ssh_git_url} ~/.dotfiles`
@@ -26,17 +27,16 @@ TBD
 
 #### Adding a new module or action (verb)
 
-1. Create new bash script with file ending `.sh` in `dotfiles/bin/cbin/vbin` or `dotfiles/bin/cbin/vbin/mbin` directory
+1. Create a new file without extension in `dotfiles/bin/cbin/vbin` or `dotfiles/bin/cbin/vbin/mbin` directory
 2. Make sure script has `#!/bin/sh` heading
 3. Run `chmod u+x` on file
-4. Remove `.sh` extension
 
 #### What are different script levels
 
 1. dotfiles
-    2. component
-        3. verb (action)
-            4. module
+1. component
+1. verb
+1. module
 
 The difference between a _module_ and _action_ can be seen in the context of the scripts themselves. Action scripts have switch cases with the modules denoted in the case body. Action scripts are supposed to be very modular. On the other hand, module scripts have the bulk of the comprehension. This is because the action scripts call the module scripts.
 
