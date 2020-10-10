@@ -2,102 +2,23 @@
 
 ## Pre-requisites
 
-1. Xcode Command Line Tools -> Git
+1. Download Xcode
+1. Install Xcode Command Line Tools -> Git
    1. `xcode-select --install`
-2. Add SSH RSA key to BitBucket
+1. Add SSH RSA key to BitBucket or Github
    1. `ssh-keygen` (just fast click thru steps)
    2. `open https://jira.internal.priority-health.com/stash/plugins/servlet/ssh/account/keys/add`
    3. `pbcopy < ~/.ssh/id_rsa.pub`
-3. Install dotfiles
-   1. `git clone ssh://git@bitbucket.spectrum-health.org:7999/ews/dotfiles.git ~/.dotfiles`
+1. Install dotfiles
+   1. `git clone {ssh_git_url} ~/.dotfiles`
    2. `export PATH=$HOME/.dotfiles/bin:$PATH`
-4. Optional:
-   1. Read [PREFACE.md](https://bitbucket.spectrum-health.org:7991/stash/projects/EWS/repos/dotfiles/browse/PREFACE.md)
+1. Optional:
+   1. Read PREFACE.md
    2. Add files to `$DOTFILES_HOME/personal`. The types of files that you would add here are described in the PREFACE.
 
 ## Usage
 
-### `dotfiles [options] [install_level] [args...]`
-
-There are a few options here:
-
-1. Express (***NOTE: does not set up your workspace***)
-
-   ```bash
-   dotfiles run --express
-   ```
-
-2. Complete
-
-   ```bash
-   dotfiles run --full
-   ```
-
-3. Custom
-
-   TBD
-
-## Additional Usage
-
-### `dotbot [options] [module] [operands...] [args...]`
-
-The options are as follows:
-
-1. Add
-
-   ```bash
-   dotbot add projects
-   ```
-
-2. Create
-
-   ```bash
-   dotbot create workspace
-   ```
-
-3. Doctor
-
-   TBD
-
-4. Help
-
-   ```bash
-   dotbot help
-   ```
-
-5. Install
-
-   ```bash
-   dotbot install bundle
-   ```
-
-   ```bash
-   dotbot install bundle --brewfile=<location>
-   ```
-
-6. Set
-
-   ```bash
-   dotbot set java 1.8 --apply-artifactory-cert
-   ```
-
-   ```bash
-   dotbot set maven
-   ```
-
-   ```bash
-   dotbot set git
-   ```
-
-   ```bash
-   dotbot set shell
-   ```
-
-7. Status
-
-   ```bash
-   dotbot status git
-   ```
+TBD
 
 ## Changes
 
