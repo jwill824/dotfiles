@@ -28,8 +28,8 @@ shell)
 ;;
 
 # macos defaults
-defaults)
-  _defaults set
+system)
+  _system set
 ;;
 
 help)

@@ -4,6 +4,7 @@
 # Path to your oh-my-zsh installation.
 export ZSH="/Users/jef18905/.oh-my-zsh"
 export SHELL="/usr/local/bin/zsh"
+export DOTFILES_HOME=$HOME/.dotfiles
 
 # Set name of the theme to load --- if set to "random", it will
 # load a random theme each time oh-my-zsh is loaded, in which case,
@@ -96,9 +97,15 @@ source $ZSH/oh-my-zsh.sh
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 
-source $HOME/.bash_profile
+alias wg="cd $WORK"
+alias dot="cd $DOTFILES_HOME"
+alias tns="cd $WORK/oracletns/network/admin"
+alias bin="cd $HOME_BIN"
+alias brew="all_proxy=http://$USER:@proxy.spectrum-health.org:9090 brew"
+alias ll="ls -l"
+alias l="ls -al"
 
-export ANDROID_SDK_ROOT="/usr/local/share/android-sdk"
+source $HOME/.bash_profile
 
 fpath=(/usr/local/share/zsh-completions $fpath)
 

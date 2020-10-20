@@ -1,0 +1,26 @@
+cask_args appdir: "/Applications"
+
+tap "homebrew/cask"
+tap "homebrew/cask-fonts"
+
+brew "zsh-autosuggestions" # https://formulae.brew.sh/formula/zsh-autosuggestions
+brew "zsh-completions"     # https://formulae.brew.sh/formula/zsh-completions
+brew "tree"                # https://formulae.brew.sh/formula/tree
+brew "ghq"                 # https://formulae.brew.sh/formula/ghq
+brew "peco"                # https://formulae.brew.sh/formula/peco
+brew "fzf"                 # https://formulae.brew.sh/formula/fzf
+brew "jq"                  # https://formulae.brew.sh/formula/jq
+brew "neovim"              # https://formulae.brew.sh/formula/neovim
+brew "node"                # https://formulae.brew.sh/formula/node
+brew "nvm"                 # https://formulae.brew.sh/formula/nvm
+
+cask "dbeaver-community"
+cask "font-fira-code"
+cask "hocus-focus"
+cask "bartender"
+cask "spectacle"
+cask "typora"
+cask "alfred"
+cask "hyper"
+cask "postman"
+cask "visual-studio-code"

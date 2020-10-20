@@ -10,7 +10,7 @@ Example:
 
 case $1 in
 
-git)
+vcs)
     
 ;;
 
@@ -18,11 +18,11 @@ dotfiles)
 
 ;;
 
-java)
+lang)
 
 ;;
 
-bundle)
+package)
 
 ;;
 

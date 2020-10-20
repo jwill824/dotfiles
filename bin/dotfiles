@@ -5,8 +5,8 @@ export PATH=$DOTFILES_HOME/bin/cbin:$PATH
 
 function base_installation_sequence {
   dotbot -I bundle
-  dotbot -S maven
-  dotbot -S java 1.8 --apply-artifactory-cert
+  dotbot -S package
+  dotbot -S lang 8 --apply-artifactory-cert
 }
 
 help_prompt="

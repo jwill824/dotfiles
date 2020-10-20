@@ -25,4 +25,4 @@ function parse_git_branch_and_add_brackets {
 PS1="[\u@\h \w]\[\$(git_color)\]\$(parse_git_branch_and_add_brackets)\[\033[0m\]\\n$ "
 export PS1
 
-. $DOTFILES_HOME/personal/git-completion.bash
+. $DOTFILES_HOME/files/git-completion.bash

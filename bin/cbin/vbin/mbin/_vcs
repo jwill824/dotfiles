@@ -55,8 +55,8 @@ status)
 ;;
 
 set)
-  if [[ -f $PERSONAL_DOTFILES_HOME/.gitconfig ]]; then
-    ln -sv $PERSONAL_DOTFILES_HOME/.gitconfig $HOME
+  if [[ -f $DOTFILES_HOME/files/.gitconfig ]]; then
+    ln -sv $DOTFILES_HOME/files/.gitconfig $HOME
   fi
 ;;
 

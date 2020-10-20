@@ -87,7 +87,7 @@ And on logout, `~/.bash_logout` is called.
   JENV_LOADED=1
   PWD=/opt/spectrum_health
   LANG=en_US.UTF-8
-  PERSONAL_DOTFILES_HOME=/Users/<username>/.dotfiles/personal
+  EXT_DOTFILES_HOME=/Users/<username>/.dotfiles/personal
   XPC_FLAGS=0x0
   PS1=[\u@\h \w]\[$(git_color)\]$(parse_git_branch_and_add_brackets)\[\033[0m\]\n$
   HOME_BIN=/opt/spectrum_health/bin
@@ -123,7 +123,7 @@ And on logout, `~/.bash_logout` is called.
 - additional profiles
 
   ```bash
-  source $PERSONAL_DOTFILES_HOME/.git_profile
+  source $EXT_DOTFILES_HOME/.git_profile
   ```
 
 - etc

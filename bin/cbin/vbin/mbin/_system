@@ -6,7 +6,7 @@ set)
   printf "Are you sure you want to continue? (This is at your own risk and going back is difficult) [y/N]"; read input
 
 	if [[ $input == 'y' ]]; then
-		. $PERSONAL_DOTFILES_HOME/.defaults
+		. $EXT_DOTFILES_HOME/.defaults
 	else
 		printf "The input did not match. Escaping now...\n"
 	fi

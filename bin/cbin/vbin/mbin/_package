@@ -1,48 +1,8 @@
 #!/bin/sh
 
-ARTIFACTORY_BASE_URL=https://repo.spectrum-health.org/artifactory
-M2_REMOTE=$ARTIFACTORY_BASE_URL/maven-release-local
-remote_maven_settings_file=$M2_REMOTE/settings.xml
-local_maven_settings_file=$M2_HOME/settings.xml
-
-function set_step1_create_resources_dir {
-  if [[ ! -d $DOTFILES_HOME/resources ]]; then
-    if [[ $SHELL =~ "bash" ]]; then
-      read -sp 'Password: ' $password
-      sudo -S <<< $password mkdir -p $DOTFILES_HOME/resources
-      sudo -S <<< $password chown $USER:staff $DOTFILES_HOME/resources
-    else 
-      sudo mkdir -p $DOTFILES_HOME/resources
-      sudo chown $USER:staff $DOTFILES_HOME/resources
-    fi
-  fi
-}
-
-function set_step2_download_artifactory_cert {
-  echo -n | openssl s_client -showcerts -connect repo.spectrum-health.org:443 | sed -ne '/-BEGIN CERTIFICATE-/,/-END CERTIFICATE-/p' > $DOTFILES_HOME/resources/artifactory.cert
-}
-
-function set_step3_download_settings_xml {
-  wget --user=$USER --password=$password --no-check-certificate $remote_maven_settings_file -P $M2_HOME
-}
-
-function set_step4_populate_settings_xml {
-  encrypted_password=$(curl -u $USER:$password -H "X-JFrog-Art-Api:AKCp2UNXYyjkJ2G5JirDrkykkPo7vuVv52UYAZANqfsyhzeX9CKhRN2XHQMP8D5STG8L488qk" -X GET "$ARTIFACTORY_BASE_URL/api/security/encryptedPassword")
-  sed -i -e "s/\\*\\*\\* Insert encrypted password here \\*\\*\\*/$encrypted_password/g" $local_maven_settings_file
-  sed -i -e "s/anonymous/$USER/g" $local_maven_settings_file
-}
-
 case $1 in
 
 set)
-  if [[ ! -f $local_maven_settings_file ]]; then
-    set_step1_create_resources_dir
-    set_step2_download_artifactory_cert
-    set_step3_download_settings_xml
-    set_step4_populate_settings_xml
-  else
-    printf "You already have $local_maven_settings_file set!\n"
-  fi
 
 ;;
 
