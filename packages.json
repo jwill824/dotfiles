@@ -1,0 +1,52 @@
+{
+    "winget": [
+        {
+            "name": "Visual Studio Code",
+            "id": "Microsoft.VisualStudioCode"
+        },
+        {
+            "name": "Docker Desktop",
+            "id": "Docker.DockerDesktop"
+        },
+        {
+            "name": "1Password",
+            "id": "AgileBits.1Password"
+        },
+        {
+            "name": "Discord",
+            "id": "Discord.Discord"
+        },
+        {
+            "name": "Hyper",
+            "id": "Zeit.Hyper"
+        },
+        {
+            "name": "Notion",
+            "id": "Notion.Notion"
+        },
+        {
+            "name": "Postman",
+            "id": "Postman.Postman"
+        },
+        {
+            "name": "Slack",
+            "id": "SlackTechnologies.Slack"
+        },
+        {
+            "name": "Spotify",
+            "id": "Spotify.Spotify"
+        },
+        {
+            "name": "Zoom",
+            "id": "Zoom.Zoom"
+        },
+        {
+            "name": "Microsoft Edge",
+            "id": "Microsoft.Edge"
+        },
+        {
+            "name": "Microsoft Remote Desktop",
+            "id": "Microsoft.RemoteDesktop"
+        }
+    ]
+}

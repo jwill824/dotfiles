@@ -1,0 +1,22 @@
+# Taps
+tap "homebrew/cask-fonts"
+
+# Casks
+cask "1password-cli"
+cask "bartender"
+cask "discord"
+cask "docker"
+cask "font-fira-code"
+cask "font-hack-nerd-font"
+cask "hyper"
+cask "microsoft-edge"
+cask "nordvpn"
+cask "notion"
+cask "postman"
+cask "raycast"
+cask "slack"
+cask "spectacle"
+cask "spotify"
+cask "visual-studio-code"
+cask "zoom"
+cask "microsoft-remote-desktop"
