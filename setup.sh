@@ -2,7 +2,7 @@
 
 # Detect OS
 if [[ "$OSTYPE" == "darwin"* ]]; then
-    OS="macos"
+    echo "macOS detected."
 elif [[ "$OSTYPE" == "msys" ]] || [[ "$OSTYPE" == "cygwin" ]]; then
     echo "Windows detected. Please use setup.ps1 instead."
     echo "Run: powershell -ExecutionPolicy Bypass -File setup.ps1"
@@ -42,7 +42,7 @@ if [ ! -d "$HOME/.dotfiles" ]; then
 fi
 
 # Install Homebrew if not installed
-if test ! $(which brew); then
+if test ! "$(which brew)"; then
     echo "Installing Homebrew..."
     /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 fi
@@ -56,11 +56,10 @@ sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.
 # Install spaceship-prompt
 git clone https://github.com/spaceship-prompt/spaceship-prompt.git "$ZSH_CUSTOM/themes/spaceship-prompt" --depth=1
 ln -s "$ZSH_CUSTOM/themes/spaceship-prompt/spaceship.zsh-theme" "$ZSH_CUSTOM/themes/spaceship.zsh-theme"
-ZSH_THEME="spaceship"
 
 # Install zsh-autosuggestions and zsh-syntax-highlighting
-sudo git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
-sudo git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting
+sudo git clone https://github.com/zsh-users/zsh-autosuggestions "${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions"
+sudo git clone https://github.com/zsh-users/zsh-syntax-highlighting.git "${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting"
 
 # Create Developer directory and clone repositories
 echo "Setting up development environment..."

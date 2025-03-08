@@ -13,6 +13,17 @@ if (-NOT ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdenti
 Write-Host "Installing Windows Subsystem for Linux..."
 wsl --install --no-distribution
 
+# Configure WSL memory limits
+Write-Host "Configuring WSL memory limits..."
+$wslConfigPath = "$HOME\.wslconfig"
+$tempPath = [System.IO.Path]::GetTempPath().TrimEnd('\')
+
+# Copy and configure .wslconfig
+Copy-Item "$HOME\.dotfiles\.wslconfig" $wslConfigPath -Force
+(Get-Content $wslConfigPath) `
+    -replace '{{TEMP_PATH}}', $tempPath.Replace('\','\\') `
+    | Set-Content $wslConfigPath -Force
+
 # Enable required Windows features
 Write-Host "Enabling required Windows features..."
 dism.exe /online /enable-feature /featurename:Microsoft-Windows-Subsystem-Linux /all /norestart

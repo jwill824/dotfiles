@@ -5,14 +5,18 @@ Personal dotfiles for macOS and Windows setup and configuration.
 ## Prerequisites
 
 ### macOS
+
 1. Install Xcode Command Line Tools:
+
     ```bash
     xcode-select --install
     ```
 
 ### Windows
+
 1. Ensure PowerShell is running as Administrator
 2. Enable script execution:
+
     ```powershell
     Set-ExecutionPolicy RemoteSigned -Scope CurrentUser
     ```
@@ -20,6 +24,7 @@ Personal dotfiles for macOS and Windows setup and configuration.
 ## Installation
 
 The setup scripts will:
+
 1. Create ~/Developer directory
 2. Clone the main repos repository
 3. Create personal directory
@@ -44,9 +49,11 @@ Invoke-WebRequest -Uri https://raw.githubusercontent.com/yourusername/dotfiles/m
 The dotfiles repository includes a devcontainer configuration for testing and development. After initial setup:
 
 1. Open VS Code in the dotfiles directory:
+
     ```bash
     code ~/Developer/repos/personal/dotfiles
     ```
+
 2. When prompted, select "Reopen in Container"
 3. The devcontainer will setup the testing environment automatically
 
@@ -90,6 +97,7 @@ Some things that need to be done manually after installation:
 ## Testing
 
 ### Windows (PowerShell)
+
 ```powershell
 # Install Pester
 Install-Module -Name Pester -Force
@@ -99,6 +107,7 @@ Invoke-Pester ./tests
 ```
 
 ### macOS (Bash)
+
 ```bash
 # Install Bats
 brew install bats-core

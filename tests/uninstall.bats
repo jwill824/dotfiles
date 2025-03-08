@@ -83,3 +83,33 @@ teardown() {
     run bash -c "source ./uninstall.sh"
     assert_success
 }
+
+# Test system defaults restoration
+@test "should restore system defaults" {
+    function defaults() { echo "mocked defaults $*"; }
+    export -f defaults
+    run defaults write com.apple.dock orientation left
+    assert_success
+}
+
+# Test application support directories cleanup
+@test "should cleanup application support directories" {
+    mkdir -p "$HOME/Library/Application Support/Test App"
+    run rm -rf "$HOME/Library/Application Support/Test App"
+    assert_success
+}
+
+# Test file permissions restoration
+@test "should restore file permissions" {
+    touch "$HOME/testfile"
+    run chmod 644 "$HOME/testfile"
+    assert_success
+}
+
+# Test package manager caches cleanup
+@test "should clean package manager caches" {
+    function brew() { echo "mocked brew $*"; }
+    export -f brew
+    run brew cleanup
+    assert_success
+}

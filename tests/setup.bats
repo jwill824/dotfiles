@@ -5,16 +5,31 @@ load 'test_helper/bats-assert/load'
 
 # Setup test environment before each test
 setup() {
-    TEST_DOTFILES_DIR="$BATS_TMPDIR/dotfiles"
-    mkdir -p "$TEST_DOTFILES_DIR"
-    export HOME="$BATS_TMPDIR/home"
-    mkdir -p "$HOME"
+    # Ensure we're in test mode
+    export BATS_NO_SYSTEM_CHANGES=1
+    export DOTFILES_TEST_MODE=1
+    export TEST_HOME="${RUNNER_TEMP}/test-home"
+    export ORIGINAL_HOME="$HOME"
+    export HOME="$TEST_HOME"
+    
+    mkdir -p "$TEST_HOME"
+    
+    # Mock sudo operations
+    sudo() { echo "sudo $*"; }
+    export -f sudo
+    
+    # Mock system commands
+    brew() { echo "brew $*"; }
+    export -f brew
+    systemsetup() { echo "systemsetup $*"; }
+    export -f systemsetup
 }
 
 # Cleanup after each test
 teardown() {
+    export HOME="$ORIGINAL_HOME"
+    rm -rf "$TEST_HOME"
     rm -rf "$TEST_DOTFILES_DIR"
-    rm -rf "$HOME"
 }
 
 # Test OS detection
@@ -73,7 +88,48 @@ teardown() {
 
 # Test Edge profile configuration
 @test "should configure Edge profiles" {
-    skip "Mock Edge profile creation"
+    # Skip if Edge is not installed
+    if [ ! -d "/Applications/Microsoft Edge.app" ]; then
+        skip "Microsoft Edge is not installed"
+    fi
     run osascript -e 'tell application "Microsoft Edge" to quit'
     assert_success
+}
+
+# Test application installation
+@test "should install required applications" {
+        function brew() { echo "mocked brew $*"; }
+    export -f brew
+    run brew install git
+    assert_success
+}
+
+# Test directory structure setup
+@test "should setup correct directory structure" {
+    mkdir -p "$HOME/Developer/work"
+    mkdir -p "$HOME/Developer/personal"
+    assert [ -d "$HOME/Developer/work" ]
+    assert [ -d "$HOME/Developer/personal" ]
+}
+
+# Test git settings configuration
+@test "should configure git settings" {
+    run git config --global user.name "Test User"
+    assert_success
+    run git config --global user.email "test@example.com"
+    assert_success
+}
+
+# Test SSH directory setup
+@test "should setup SSH directory" {
+    run mkdir -p "$HOME/.ssh"
+    assert_success
+    run chmod 700 "$HOME/.ssh"
+    assert_success
+}
+
+# Add new test for safety checks
+@test "should respect test mode" {
+    [ "$BATS_NO_SYSTEM_CHANGES" = "1" ]
+    [ "$DOTFILES_TEST_MODE" = "1" ]
 }

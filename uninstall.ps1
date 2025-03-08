@@ -47,16 +47,4 @@ if (Test-Path $edgeProfilesPath) {
     Get-ChildItem $edgeProfilesPath -Directory | Where-Object { $_.Name -ne "Default" } | Remove-Item -Recurse -Force
 }
 
-# Clean up repositories and directories
-Write-Host "Cleaning up development environment..."
-if (Test-Path "$HOME\Developer") {
-    Remove-Item -Path "$HOME\Developer" -Recurse -Force
-}
-
-# Remove dotfiles
-Write-Host "Removing dotfiles..."
-if (Test-Path "$HOME\.dotfiles") {
-    Remove-Item -Path "$HOME\.dotfiles" -Recurse -Force
-}
-
 Write-Host "Uninstall complete! Please restart your computer for all changes to take effect."
