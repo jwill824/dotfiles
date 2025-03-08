@@ -33,10 +33,6 @@ jobs:
           /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
         fi
 
-    - name: Setup Bats and bats libs
-      id: setup-bats
-      uses: bats-core/bats-action@3.0.0
-
     - name: Setup Windows Dependencies
       if: matrix.os == 'windows-latest'
       shell: powershell
@@ -57,6 +53,14 @@ jobs:
       if: matrix.os == 'windows-latest'
       uses: Cyberboss/install-winget@v1
 
+    - name: Setup Bats and bats libs
+      if: matrix.os == 'macos-latest'
+      id: setup-bats
+      uses: bats-core/bats-action@3.0.0    
+      with:
+        support-path: "${{ github.workspace }}/tests/test_helper/bats-support"
+        assert-path: "${{ github.workspace }}/tests/test_helper/bats-assert"
+        
     - name: macOS Tests
       if: matrix.os == 'macos-latest'
       uses: bats-core/bats-action@1.5.4
