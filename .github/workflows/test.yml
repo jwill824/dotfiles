@@ -53,24 +53,21 @@ jobs:
       if: matrix.os == 'windows-latest'
       shell: powershell
       run: |
-        # Install Pester if not present
-        if (-not (Get-Module -ListAvailable -Name Pester)) {
-          Install-Module -Name Pester -Force -SkipPublisherCheck -MinimumVersion 5.0
-        }
+        # Install WinGet
+        $progressPreference = 'silentlyContinue'
+        Write-Information "Downloading WinGet and its dependencies..."
+        Invoke-WebRequest -Uri https://aka.ms/getwinget -OutFile Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle
+        Invoke-WebRequest -Uri https://aka.ms/Microsoft.VCLibs.x64.14.00.Desktop.appx -OutFile Microsoft.VCLibs.x64.14.00.Desktop.appx
+        Invoke-WebRequest -Uri https://github.com/microsoft/microsoft-ui-xaml/releases/download/v2.7.3/Microsoft.UI.Xaml.2.7.x64.appx -OutFile Microsoft.UI.Xaml.2.7.x64.appx
+        Add-AppxPackage Microsoft.VCLibs.x64.14.00.Desktop.appx
+        Add-AppxPackage Microsoft.UI.Xaml.2.7.x64.appx
+        Add-AppxPackage Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle
         
-        # Install WinGet if not present (should be on runners)
-        if (-not (Get-Command winget -ErrorAction SilentlyContinue)) {
-          # Add WinGet installation logic if needed
-          Write-Host "WinGet is required but not found!"
-          exit 1
-        }
+        # Install Pester for testing
+        Install-Module -Name Pester -Force -SkipPublisherCheck -MinimumVersion 5.0
+        Import-Module Pester
         
-        # Ensure Git is installed
-        if (-not (Get-Command git -ErrorAction SilentlyContinue)) {
-          winget install -e --id Git.Git --accept-source-agreements --accept-package-agreements
-        }
-        
-        # Prevent system modifications during tests
+        # Set test environment variables
         $env:NO_SYSTEM_CHANGES = "1"
         $env:SKIP_ADMIN_TESTS = "1"
         
@@ -81,7 +78,9 @@ jobs:
     - name: macOS Tests
       if: matrix.os == 'macos-latest'
       run: |
-        chmod +x ./tests/*.sh ./tests/*.bats
+        # Set execute permissions only on .bats files
+        find ./tests -name "*.bats" -exec chmod +x {} \;
+        
         # Run tests but don't fail if some are skipped
         bats ./tests/setup.bats || true
         bats ./tests/uninstall.bats || true
