@@ -1,15 +1,16 @@
 #!/usr/bin/env bats
 
-# Load test helpers from the correct path
-load "test_helper/bats-support/load"
-load "test_helper/bats-assert/load"
+# Load test helpers
+load "test_helper"
 
-# Setup test environment before each test
 setup() {
-    TEST_DOTFILES_DIR="$BATS_TMPDIR/dotfiles"
-    mkdir -p "$TEST_DOTFILES_DIR"
-    export HOME="$BATS_TMPDIR/home"
-    mkdir -p "$HOME"
+    _load_libs
+    
+    # Setup test environment
+    export TEST_HOME="${RUNNER_TEMP}/test-home"
+    export ORIGINAL_HOME="$HOME"
+    export HOME="$TEST_HOME"
+    mkdir -p "$TEST_HOME"
     mkdir -p "$HOME/.dotfiles/backup"
 }
 

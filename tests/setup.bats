@@ -1,29 +1,16 @@
 #!/usr/bin/env bats
 
-# Load test helpers from the correct path
-load "test_helper/bats-support/load"
-load "test_helper/bats-assert/load"
+# Load test helpers
+load "test_helper"
 
-# Setup test environment before each test
 setup() {
-    # Ensure we're in test mode
-    export BATS_NO_SYSTEM_CHANGES=1
-    export DOTFILES_TEST_MODE=1
+    _load_libs
+    
+    # Setup test environment
     export TEST_HOME="${RUNNER_TEMP}/test-home"
     export ORIGINAL_HOME="$HOME"
     export HOME="$TEST_HOME"
-    
     mkdir -p "$TEST_HOME"
-    
-    # Mock sudo operations
-    sudo() { echo "sudo $*"; }
-    export -f sudo
-    
-    # Mock system commands
-    brew() { echo "brew $*"; }
-    export -f brew
-    systemsetup() { echo "systemsetup $*"; }
-    export -f systemsetup
 }
 
 # Cleanup after each test

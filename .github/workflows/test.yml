@@ -56,17 +56,14 @@ jobs:
     - name: Setup Bats and bats libs
       if: matrix.os == 'macos-latest'
       id: setup-bats
-      uses: bats-core/bats-action@3.0.0    
-      with:
-        support-path: "${{ github.workspace }}/tests/test_helper/bats-support"
-        assert-path: "${{ github.workspace }}/tests/test_helper/bats-assert"
-        
+      uses: bats-core/bats-action@3.0.0
+
     - name: macOS Tests
-      if: matrix.os == 'macos-latest'
-      uses: bats-core/bats-action@1.5.4
-      with:
-        tests: ./tests/*.bats
-        continue-on-error: true
+      shell: bash
+      env:
+        BATS_LIB_PATH: ${{ steps.setup-bats.outputs.lib-path }}
+        TERM: xterm
+      run: bats tests
 
     - name: Windows Setup
       if: matrix.os == 'windows-latest'
