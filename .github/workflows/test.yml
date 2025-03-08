@@ -27,13 +27,15 @@ jobs:
 
     - name: Setup macOS Dependencies
       if: matrix.os == 'macos-latest'
-      uses: bats-core/bats-action@1.5.4
-      with:
-        setup: |
-          brew install git zsh
-          mkdir -p ./tests/test_helper
-          git clone https://github.com/bats-core/bats-support ./tests/test_helper/bats-support
-          git clone https://github.com/bats-core/bats-assert ./tests/test_helper/bats-assert
+      run: |
+        # Install Homebrew if not present (should be installed on runners)
+        if ! command -v brew &> /dev/null; then
+          /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+        fi
+
+    - name: Setup Bats and bats libs
+      id: setup-bats
+      uses: bats-core/bats-action@3.0.0
 
     - name: Setup Windows Dependencies
       if: matrix.os == 'windows-latest'
