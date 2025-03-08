@@ -1,8 +1,8 @@
 #!/usr/bin/env bats
 
 # Load test helpers from the correct path
-load "${BATS_LIB_PATH}/bats-support/load"
-load "${BATS_LIB_PATH}/bats-assert/load"
+load "test_helper/bats-support/load"
+load "test_helper/bats-assert/load"
 
 # Setup test environment before each test
 setup() {

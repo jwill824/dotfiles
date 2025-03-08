@@ -19,59 +19,26 @@ jobs:
 
     - name: Setup Test Environment
       run: |
-        # Create test directories that won't affect real system
         mkdir -p ${{ runner.temp }}/test-home
         mkdir -p ${{ runner.temp }}/test-dotfiles
-        # Set test environment variables
         echo "HOME=${{ runner.temp }}/test-home" >> $GITHUB_ENV
         echo "DOTFILES_TEST_MODE=1" >> $GITHUB_ENV
         echo "RUNNER_TEMP=${{ runner.temp }}" >> $GITHUB_ENV
 
     - name: Setup macOS Dependencies
       if: matrix.os == 'macos-latest'
-      run: |
-        # Install Homebrew if not present (should be installed on runners)
-        if ! command -v brew &> /dev/null; then
-          /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-        fi
-        
-        # Install test dependencies
-        brew install bats-core
-        brew install git
-        brew install zsh
-        
-        # Install test helpers in the correct location
-        mkdir -p ./tests/test_helper
-        git clone https://github.com/bats-core/bats-support ./tests/test_helper/bats-support
-        git clone https://github.com/bats-core/bats-assert ./tests/test_helper/bats-assert
-        
-        # Prevent actual system modifications
-        export BATS_NO_SYSTEM_CHANGES=1
-        export SKIP_SUDO_TESTS=1
+      uses: bats-core/bats-action@1.5.4
+      with:
+        setup: |
+          brew install git zsh
+          mkdir -p ./tests/test_helper
+          git clone https://github.com/bats-core/bats-support ./tests/test_helper/bats-support
+          git clone https://github.com/bats-core/bats-assert ./tests/test_helper/bats-assert
 
     - name: Setup Windows Dependencies
       if: matrix.os == 'windows-latest'
       shell: powershell
       run: |
-        # Install WinGet
-        $progressPreference = 'silentlyContinue'
-        Write-Information "Downloading WinGet and its dependencies..."
-        
-        # Download latest WinGet
-        Invoke-WebRequest -Uri https://aka.ms/getwinget -OutFile Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle
-        
-        # Download and install Visual C++ dependencies
-        Invoke-WebRequest -Uri https://aka.ms/Microsoft.VCLibs.x64.14.00.Desktop.appx -OutFile Microsoft.VCLibs.x64.14.00.Desktop.appx
-        Add-AppxPackage Microsoft.VCLibs.x64.14.00.Desktop.appx
-        
-        # Download and install UI XAML
-        Invoke-WebRequest -Uri https://www.nuget.org/api/v2/package/Microsoft.UI.Xaml/2.8.6 -OutFile Microsoft.UI.Xaml.2.8.zip
-        Expand-Archive Microsoft.UI.Xaml.2.8.zip
-        Add-AppxPackage ".\Microsoft.UI.Xaml.2.8\tools\AppX\x64\Release\Microsoft.UI.Xaml.2.8.appx"
-        
-        # Install WinGet
-        Add-AppxPackage Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle
-        
         # Install Pester for testing
         Install-Module -Name Pester -Force -SkipPublisherCheck -MinimumVersion 5.0
         Import-Module Pester
@@ -84,15 +51,16 @@ jobs:
         $env:TEST_REGISTRY_PATH = "HKCU:\Software\DotfilesTest"
         New-Item -Path $env:TEST_REGISTRY_PATH -Force
 
+    - name: Install WinGet
+      if: matrix.os == 'windows-latest'
+      uses: Cyberboss/install-winget@v1
+
     - name: macOS Tests
       if: matrix.os == 'macos-latest'
-      run: |
-        # Set execute permissions for all test files
-        chmod +x ./tests/*.bats
-        
-        # Run tests with correct helper paths
-        BATS_LIB_PATH="./tests/test_helper" bats ./tests/setup.bats || true
-        BATS_LIB_PATH="./tests/test_helper" bats ./tests/uninstall.bats || true
+      uses: bats-core/bats-action@1.5.4
+      with:
+        tests: ./tests/*.bats
+        continue-on-error: true
 
     - name: Windows Setup
       if: matrix.os == 'windows-latest'
